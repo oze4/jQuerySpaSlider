@@ -90,14 +90,20 @@
                 }, 700);
             }
         });
+        
+        $.fn.extend({
+            removeIsShown: function() {
+                return this.find('.is-shown')
+                    .removeClass('is-shown');
+            }
+        });
 
         function showSlide(page, direction) {
             $('#page-index').hide();
             let pageId = `#page-${page}`;
             if (!$(pageId).hasClass('is-shown')) {
                 $('#pages')
-                    .find('.is-shown')
-                    .removeClass('is-shown')
+                    .removeIsShown()
                     .hide();
                 $(pageId)
                     .slide(direction)
@@ -107,8 +113,7 @@
 
         function showIndex() {
             $('#pages')
-                .find('.is-shown')
-                .removeClass('is-shown')
+                .removeIsShown()
                 .slideUp('fast', function () {
                     $('#page-index').show();
                 });

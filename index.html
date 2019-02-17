@@ -88,16 +88,13 @@
                 return this.show('slide', {
                     direction: slideDirection
                 }, 700);
-            }
-        });
-        
-        $.fn.extend({
+            },
             removeIsShown: function() {
                 return this.find('.is-shown')
                     .removeClass('is-shown');
             }
         });
-
+        
         function showSlide(page, direction) {
             $('#page-index').hide();
             let pageId = `#page-${page}`;

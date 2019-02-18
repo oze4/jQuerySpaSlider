@@ -13,8 +13,14 @@
             display: none;
         }
 
-        #pages>div {
-            height: 100vh;
+        #pages {
+            margin-top: 20px;
+        }
+
+        #pages>.is-hidden {
+            position: absolute;
+            height: 100%;
+            width: 100%;
         }
 
         #page-first {
@@ -52,15 +58,17 @@
 
 
     <div class='banner'>
-        <h2>Reddit jQuery SPA Pager</h2>
+        <h2>
+            Reddit jQuery SPA Pager
+        </h2>
         <small>also built with jQueryUI</small>
     </div>
     <div class="btns">
-        <button onclick="showIndex()">Index</button>
-        <button onclick="showSlide('first','up')">1</button>
-        <button onclick="showSlide('second', 'down')">2</button>
-        <button onclick="showSlide('third', 'right')">3</button>
-        <button onclick="showSlide('fourth', 'left')">4</button>
+        <button href="#index" onclick="showIndex()">Index</button>
+        <button href="page1" onclick="showSlide('first','up')">1</button>
+        <button href="page2" onclick="showSlide('second', 'down')">2</button>
+        <button href="page3" onclick="showSlide('third', 'right')">3</button>
+        <button href="page4" onclick="showSlide('fourth', 'left')">4</button>
     </div>
     <div id='pages'>
         <div id='page-index'>
@@ -81,39 +89,40 @@
         </div>
     </div>
 
-    
+
     <script type='text/javascript'>
         $.fn.extend({
             slide: function (slideDirection) {
-                return this.show('slide', {
+                return this.toggle('slide', {
                     direction: slideDirection
                 }, 700);
             },
-            removeIsShown: function() {
-                return this.find('.is-shown')
-                    .removeClass('is-shown');
-            }
         });
-        
-        function showSlide(page, direction) {
-            $('#page-index').hide();
-            let pageId = `#page-${page}`;
-            if (!$(pageId).hasClass('is-shown')) {
-                $('#pages')
-                    .removeIsShown()
-                    .hide();
-                $(pageId)
-                    .slide(direction)
-                    .addClass('is-shown');
+        function findOpposite(d) {
+            switch (d) {
+                case "up":
+                    return "down";
+                case "down":
+                    return "up";
+                case "left":
+                    return "right";
+                case "right":
+                    return "left";
             }
         }
-
+        function showSlide(page, direction) {
+            $('#page-index').hide();
+            let $p = $(`#page-${page}`);
+            if (!$p.hasClass('is-shown')) {
+                let oppDir = findOpposite(direction);
+                $('#pages').find('.is-shown').slide(oppDir).removeClass('is-shown');
+                $p.slide(direction).addClass('is-shown');
+            }
+        }
         function showIndex() {
-            $('#pages')
-                .removeIsShown()
-                .slideUp('fast', function () {
-                    $('#page-index').show();
-                });
+            $('#pages').find('.is-shown').removeClass('is-shown').hide('fast', function () {
+                $('#page-index').show('fast');
+            });
         }
     </script>
 
